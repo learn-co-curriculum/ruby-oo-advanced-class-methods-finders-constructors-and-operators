@@ -135,7 +135,7 @@ class Person
 
   def initialize(name)
     @name = name
-    @people << self # changed from @@all
+    @@people << self # changed from @@all
   end
 
   def self.find_by_name(name)
