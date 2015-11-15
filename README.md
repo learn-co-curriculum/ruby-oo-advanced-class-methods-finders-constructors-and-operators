@@ -40,7 +40,7 @@ class Person
 
   def initialize(name)
     @name = name
-    @all << self
+    @@all << self
   end
 end
 
@@ -63,7 +63,7 @@ class Person
 
   def initialize(name)
     @name = name
-    @all << self
+    @@all << self
   end
 end
 
@@ -97,7 +97,7 @@ class Person
 
   def initialize(name)
     @name = name
-    @all << self
+    @@all << self
   end
 
   def self.find_by_name(name)
@@ -316,7 +316,7 @@ class Person
   @@all = []
 
   def initialize
-    @all << self
+    @@all << self
   end
 end
 ```
@@ -328,7 +328,7 @@ class Person
   @@all = []
 
   def self.create
-    @all << self.new
+    @@all << self.new
   end
 end
 ```
@@ -350,7 +350,7 @@ class Person
   def self.create(name)
     person = self.new
     person.name = name
-    @all << person
+    @@all << person
   end
 end
 
@@ -376,7 +376,7 @@ class Person
   def self.create(name)
     person = self.new
     person.name = name
-    @all << person
+    @@all << person
   end
 
   def self.print_all
