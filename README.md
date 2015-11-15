@@ -421,7 +421,7 @@ The logic for actually normalizing a person's name is pretty complex. `person.na
 
 What we're doing is splitting a name, like `"ada lovelace"`, into an array at the space, `" "`, returning `["ada", "lovelace"]`. With that array we collect each word into a new array after it has been capitalized, returning `["Ada", "Lovelace"]`. We then join the elements in that array with a `" "` returning the final capitalized name, `"Ada Lovelace"`.
 
-Give how complex normalizing a person's name is, we should actually encapsulate that into the `Person` instance.
+Given how complex normalizing a person's name is, we should actually encapsulate that into the `Person` instance.
 
 ```ruby
 class Person
