@@ -174,7 +174,7 @@ Within `#initialize`, an instance method, `self` will refer to an instance, an i
 
 If the variable `@@all` changes names, we only have to update it in one place, the `Person.all` reader. All code that relies on that method still works. 1 conceptual change, 1 line-of-code (LOC) change. That is a proportionate amount of work.
 
-In addition to the maintainability of our code through class method level encapsulation (when we build class methods to consolidate the logic of how the class operates so we only have to update 1 place in our code when something changes), class methods provide a more readable API for the class in the rest of the code. Consider just one more time the difference in seeing the following two lines of code litered throughout your code:
+In addition to the maintainability of our code through class method level encapsulation (when we build class methods to consolidate the logic of how the class operates so we only have to update 1 place in our code when something changes), class methods provide a more readable API for the class in the rest of the code. Consider just one more time the difference in seeing the following two lines of code littered throughout your code:
 
 ```ruby
 Person.all.detect{|p| p.name == "Ada Lovelace"} # Literal implementation, no abstraction or encapsulation
