@@ -196,7 +196,7 @@ Steve Jobs, 56, Apple
 Martha Stewart, 74, MSL
 ```
 
-They tell us that they will need often uploads CSVs of people data.  Let's look at how we'd create a person instance from a csv.
+They tell us that they will often need to upload CSVs of people data.  Let's look at how we'd create a person instance from a csv.
 
 ```ruby
 class Person
