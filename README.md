@@ -8,7 +8,7 @@
 
 ## Advanced Class Methods
 
-Class methods can act as class readers for class variables as in the case of `Song.all`. Classes are just objects. Objects encapsulate and provide functionality unique to their scope through methods. Instances methods work on an individual level, acting upon specific instances of a class. In the same way, an entire class can be responsible for providing an interface to its data and behavior to the rest of your code through building class methods.
+Class methods can act as class readers for class variables as in the case of `Song.all`. Classes are just objects. Objects encapsulate and provide functionality unique to their scope through methods. Instance methods work on an individual level, acting upon specific instances of a class. In the same way, an entire class can be responsible for providing an interface to its data and behavior to the rest of your code through building class methods.
 
 ```ruby
 class Person
