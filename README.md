@@ -259,7 +259,7 @@ new_csv_data = "Avi Flombaum, 31, Flatiron School
 Payal Kadakia, 30, ClassPass
 "
 
-people << Person.new_from_csv(csv_data)
+people << Person.new_from_csv(new_csv_data)
 people #=> [
 #<Person @name="Elon Musk"...>,
 #<Person @name="Steve Jobs"...>
@@ -472,3 +472,5 @@ end
 ```
 
 Here our `Person.destroy_all` method uses the [`Array#clear`](http://docs.ruby-lang.org/en/2.0.0/Array.html#method-i-clear) method to empty the `@@all` array through the class reader `Person.all`.
+
+<a href='https://learn.co/lessons/ruby-advanced-class-methods-readme' data-visibility='hidden'>View this lesson on Learn.co</a>
