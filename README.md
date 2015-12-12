@@ -144,7 +144,7 @@ class Person
 end
 ```
 
-Variable names are a very low level abstraction. They are like making light by fire. Methods that read out of a variable provide an abstraction for the literal variable name. Relying and using a reader method is almost alway better than using the variable.
+Variable names are a very low level abstraction. They are like making light by fire. Methods that read out of a variable provide an abstraction for the literal variable name. Relying and using a reader method is almost always better than using the variable.
 
 We already have a method to read `@@all`, `Person.all`, why not use that method in `Person.find_by_name`? Within a class method, how do we call another class method? What is the scope of the class method? What is self? The class itself. Consider:
 
@@ -472,3 +472,5 @@ end
 ```
 
 Here our `Person.destroy_all` method uses the [`Array#clear`](http://docs.ruby-lang.org/en/2.0.0/Array.html#method-i-clear) method to empty the `@@all` array through the class reader `Person.all`.
+
+<a href='https://learn.co/lessons/ruby-advanced-class-methods-readme' data-visibility='hidden'>View this lesson on Learn.co</a>
