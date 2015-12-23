@@ -259,7 +259,7 @@ new_csv_data = "Avi Flombaum, 31, Flatiron School
 Payal Kadakia, 30, ClassPass
 "
 
-people << Person.new_from_csv(csv_data)
+people << Person.new_from_csv(new_csv_data)
 people #=> [
 #<Person @name="Elon Musk"...>,
 #<Person @name="Steve Jobs"...>
