@@ -23,7 +23,7 @@ end
 
 `def self.all` defines a class method that simply exposes the value in the class variable `@@all`. This is a class reader, very similar to an instance reader method that reads out of an instance level property such as `@name`.
 
-What else can class methods help us with? What other common class-level functionality exposed through class methods?
+What else can class methods help us with? What other common class-level functionality can be exposed through class methods?
 
 ## Class Finders
 
