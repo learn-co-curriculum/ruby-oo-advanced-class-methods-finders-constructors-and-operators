@@ -307,7 +307,7 @@ Why do this? If we need to be able to create people from csvs, why not just buil
 
 Initialize should be closed to modification. It should only handle the most required and common cases of initializing an object. Anything we add to initialize should be permanent and never modified. If we need more functionality when making an instance, instead of modifying initialize, we can extend it by wrapping it within a custom constructor.
 
-If we ever need to make people from xml or json we can continue extend the object with custom constructors instead of constantly modifying initialize with complex logic.
+If we ever need to make people from xml or json we can continue to extend the object with custom constructors instead of constantly modifying initialize with complex logic.
 
 Let's look at a somewhat simpler example of a custom constructor that wraps `.new`. When building objects that can be saved into a class variable `@@all`, we might not always want to save the newly instantiated instance.
 
