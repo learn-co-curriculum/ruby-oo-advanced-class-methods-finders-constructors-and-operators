@@ -196,7 +196,7 @@ Steve Jobs, 56, Apple
 Martha Stewart, 74, MSL
 ```
 
-They tell us that they will often need to upload CSVs of people data.  Let's look at how we'd create a person instance from a csv.
+They tell us that they will often need to upload CSVs of people data.  Let's look at how we'd create a person instance from a CSV.
 
 ```ruby
 class Person
@@ -223,7 +223,7 @@ end
 people #=> [#<Person @name="Elon Musk"...>, #<Person @name="Steve Jobs"...>...]
 ```
 
-Pretty complex. We don't want to do that through our application. In an ideal world every time we got csv data we'd just want the `Person` class to be responsible for parsing it. Could we build something like `Person.new_from_csv`? Of course! Let's look at how we might implement a custom constructor.
+Pretty complex. We don't want to do that through our application. In an ideal world every time we got CSV data we'd just want the `Person` class to be responsible for parsing it. Could we build something like `Person.new_from_csv`? Of course! Let's look at how we might implement a custom constructor.
 
 ```ruby
 class Person
@@ -303,7 +303,7 @@ end
 
 Like in any class method, `self` refers to the class itself so we can call `self.new` to piggyback, wrap, or extend the functionality of `Person.new`. We parse the raw data, create an instance, and assign the data to the corresponding instance properties.
 
-Why do this? If we need to be able to create people from csvs, why not just build that directly into initialize? Well, the honest answer is because we don't always want to create people from csv data. Anything we build into initialize will happen always. Another key to writing maintainable code is designing functionality that is closed to modification but open to extension.
+Why do this? If we need to be able to create people from CSVs, why not just build that directly into initialize? Well, the honest answer is because we don't always want to create people from CSV data. Anything we build into initialize will happen always. Another key to writing maintainable code is designing functionality that is closed to modification but open to extension.
 
 Initialize should be closed to modification. It should only handle the most required and common cases of initializing an object. Anything we add to initialize should be permanent and never modified. If we need more functionality when making an instance, instead of modifying initialize, we can extend it by wrapping it within a custom constructor.
 
@@ -321,7 +321,7 @@ class Person
 end
 ```
 
-With that code, no matter what, people instances will always be saved. We could instead implement a simple `.create` class method to provide the functionality of instantiating and creating the instance, leaving `.new` to function as normal.
+With that code, no matter what, person instances will always be saved. We could instead implement a simple `.create` class method to provide the functionality of instantiating and creating the instance, leaving `.new` to function as normal.
 
 ```ruby
 class Person
@@ -394,7 +394,7 @@ Way nicer.
 
 ## Class Operators
 
-Additionally, class methods might provide a global operation on data. Imagine that one of the csvs we were provided with has peoples' names in lowercase letters. We want proper capitalization. We can build a class method `Person.normalize_names`
+Additionally, class methods might provide a global operation on data. Imagine that one of the csvs we were provided with has people's names in lowercase letters. We want proper capitalization. We can build a class method `Person.normalize_names`
 
 ```ruby
 class Person
@@ -448,7 +448,7 @@ class Person
 end
 ```
 
-With `#normalize_name`, we've taught a `Person` instance how to properly convert it's name into a capitalized version. The class method that acts on the global data of all people is simplified and delegates the actual normalization to the original instances. This is a common pattern for global class operators.
+With `#normalize_name`, we've taught a `Person` instance how to properly convert its name into a capitalized version. The class method that acts on the global data of all people is simplified and delegates the actual normalization to the original instances. This is a common pattern for global class operators.
 
 Another example of this type of global data manipulation might be deleting all the people. We would build a `Person.destroy_all` class method that will clear out the `@@all` array.
 
@@ -474,3 +474,5 @@ end
 Here our `Person.destroy_all` method uses the [`Array#clear`](http://docs.ruby-lang.org/en/2.0.0/Array.html#method-i-clear) method to empty the `@@all` array through the class reader `Person.all`.
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/ruby-advanced-class-methods-readme' title='Ruby Advanced Class Methods'>Ruby Advanced Class Methods</a> on Learn.co and start learning to code for free.</p>
+
+<p class='util--hide'>View <a href='https://learn.co/lessons/ruby-advanced-class-methods-readme'>Advanced Class Methods</a> on Learn.co and start learning to code for free.</p>
