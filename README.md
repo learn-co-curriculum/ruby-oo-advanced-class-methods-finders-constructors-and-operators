@@ -172,7 +172,7 @@ end
 
 Within `#initialize`, an instance method, `self` will refer to an instance, an individual person, not the entire class, so we can't simply say `self.all` within an instance method. Instead, we go from the instance, `self`, to the class via `self.class`, returning `Person`, and then evoke the `Person.all` method.
 
-If the variable `@@all` changes names, we only have to update it in one place, the `Person.all` reader. All code that relies on that method still works. 1 conceptual change, 1 line-of-code (LOC) change. That is a proportionate amount of work.
+If the variable `@@all` changes names, we only have to update it in one place, the `Person.all` reader. All code that relies on that method still works. 1 conceptual change, 1 line-of-code (LOC) change. That is a commensurate amount of work.
 
 In addition to the maintainability of our code through class method level encapsulation (when we build class methods to consolidate the logic of how the class operates so we only have to update 1 place in our code when something changes), class methods provide a more readable API for the class in the rest of the code. Consider just one more time the difference in seeing the following two lines of code littered throughout your code:
 
