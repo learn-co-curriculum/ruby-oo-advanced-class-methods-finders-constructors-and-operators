@@ -21,13 +21,13 @@ class Person
 end
 ```
 
-`def self.all` defines a class method that simply exposes the value in the class variable `@@all`. This is a class reader, very similar to an instance reader method that reads out of an instance level property such as `@name`.
+`def self.all` defines a class method that simply exposes the value in the class variable `@@all`. This is a class reader, very similar to an instance reader method that reads out of an instance-level property such as `@name`.
 
 What else can class methods help us with? What other common class-level functionality can be exposed through class methods?
 
 ## Class Finders
 
-Imagine a Person class that provides access to all its instances through Person.all.
+Imagine a `Person` class that provides access to all its instances through `Person.all`.
 
 ```ruby
 class Person
@@ -80,11 +80,11 @@ avi_flombaum = Person.all.detect{|person| person.name == "Avi Flombaum"}
 avi_flombaum #=> nil
 ```
 
-We're using the [`#detect`](http://ruby-doc.org/core-2.2.3/Enumerable.html#method-i-detect) to return the first object from `Person.all` that satisfies the condition of its name property equaling the name we are looking for.
+We're using the [`#detect`](http://ruby-doc.org/core/Enumerable.html#method-i-detect) method to return the first object from `Person.all` that satisfies the condition of its `@name` property equaling the name we are looking for.
 
-Every time your application requires you to find a particular person by name you will have to use `#detect` or `#each` or some sort of iteration logic on `Person.all` to find a specific instance of a person that has the name you want.
+Every time your application requires you to find a particular person by name, you will have to use `#detect` or `#each` or some sort of iteration logic on `Person.all` to find a specific instance of a person that has the name you want.
 
-Instead of implementing that logic throughout your code, you should encapsulate it into a class method `Person.find_by_name`. Make the `Person` class responsible for knowing how to find a person by name.
+Instead of implementing that logic throughout your code, you should encapsulate it into a class method, such as `Person.find_by_name`. Make the `Person` class responsible for knowing how to find a person by name.
 
 ```ruby
 class Person
@@ -118,11 +118,11 @@ avi_flombaum = Person.find_by_name("Avi Flombaum")
 avi_flombaum #=> nil
 ```
 
-We call class methods like `Person.find_by_name` finders. Finder class methods are responsible for finding instances based on properties or conditions.
+We call class methods like `Person.find_by_name` 'finders'. Finder class methods are responsible for finding instances based on properties or conditions.
 
 But we can improve the code above slightly. Code that relies on abstraction is more maintainable and extendable over time. In general, we advance as a species and a civilization when technology provides an abstraction for us to use instead of the literal implementation. When you want light, you don't need to start a fire, you can just flick a light switch. That is an abstraction. The light switch is an abstraction for how people used to create light from fire. We promise. If creating and using abstractions have gotten people this far, we should probably continue embracing that design principle in our code. So where is the literal thing that could be abstracted in the code above?
 
-Our current implementation of `Person.find_by_name` reads the instance data for the class directly out of the class variable `@@all`. But imagine if this variable changes? We'd have to update both Person.all to read out of the new variable and `Person.find_by_name` and any other method that relied on the literal variable name would break otherwise.
+Our current implementation of `Person.find_by_name` reads the instance data for the class directly out of the class variable `@@all`. But imagine if this variable changes? Every method that relies on that literal variable name –– `Person.all`, `Person.find_by_name`, etc. –– would break, and we'd have to update all of them to read from the new variable.
 
 ```ruby
 class Person
@@ -144,9 +144,9 @@ class Person
 end
 ```
 
-Variable names are a very low level abstraction. They are like making light by fire. Methods that read out of a variable provide an abstraction for the literal variable name. Relying and using a reader method is almost always better than using the variable.
+Variable names are a very low-level abstraction. They are like making light by fire. Methods that read out of a variable provide an abstraction for the literal variable name. Using a reader method is almost always better and more reliable than using the variable.
 
-We already have a method to read `@@all`, `Person.all`, why not use that method in `Person.find_by_name`? Within a class method, how do we call another class method? What is the scope of the class method? What is self? The class itself. Consider:
+We already have a method to read `@@all`, `Person.all`, so why not use that method in `Person.find_by_name`? Within a class method, how do we call another class method? What is the scope of the class method? What is self? The class itself. Consider:
 
 ```ruby
 class Person
@@ -174,7 +174,7 @@ Within `#initialize`, an instance method, `self` will refer to an instance, an i
 
 If the variable `@@all` changes names, we only have to update it in one place, the `Person.all` reader. All code that relies on that method still works. 1 conceptual change, 1 line-of-code (LOC) change. That is a commensurate amount of work.
 
-In addition to the maintainability of our code through class method level encapsulation (when we build class methods to consolidate the logic of how the class operates so we only have to update 1 place in our code when something changes), class methods provide a more readable API for the class in the rest of the code. Consider just one more time the difference in seeing the following two lines of code littered throughout your code:
+In addition to the maintainability of our code through class method-level encapsulation (when we build class methods to consolidate the logic of how the class operates so that we only have to update one piece of our code when one thing changes), class methods provide a more readable API for the class in the rest of the code. Consider just one more time the difference in seeing the following two lines of code littered throughout your code:
 
 ```ruby
 Person.all.detect{|p| p.name == "Ada Lovelace"} # Literal implementation, no abstraction or encapsulation
@@ -188,11 +188,11 @@ Finders are just one example of a more semantic API for our classes. Let's look 
 
 ## Custom Class Constructors
 
-Our marketing team has provided us with a list of people in Comma Separated Format (CSV), a common formatting convention when exporting from spreadsheets. The raw data looks like:
+Our marketing team has provided us with a list of people in comma-separated values format (CSV), a common formatting convention when exporting from spreadsheets. The raw data looks like:
 
 ```
-Elon Musk, 44, Tesla/SpaceX
-Steve Jobs, 56, Apple
+Elon Musk, 45, Tesla/SpaceX
+Mark Zuckerberg, 32, Facebook
 Martha Stewart, 74, MSL
 ```
 
@@ -203,8 +203,8 @@ class Person
   attr_accessor :name, :age, :company
 end
 
-csv_data = "Elon Musk, 44, Tesla
-Steve Jobs, 56, Apple
+csv_data = "Elon Musk, 45, Tesla
+Mark Zuckerberg, 32, Facebook
 Martha Stewart, 74, MSL
 "
 
@@ -220,7 +220,7 @@ people = rows.collect do |row|
   person.company = company
   person
 end
-people #=> [#<Person @name="Elon Musk"...>, #<Person @name="Steve Jobs"...>...]
+people #=> [#<Person @name="Elon Musk"...>, #<Person @name="Mark Zuckerberg"...>...]
 ```
 
 Pretty complex. We don't want to do that through our application. In an ideal world every time we got CSV data we'd just want the `Person` class to be responsible for parsing it. Could we build something like `Person.new_from_csv`? Of course! Let's look at how we might implement a custom constructor.
@@ -247,29 +247,28 @@ class Person
   end
 end
 
-csv_data = "Elon Musk, 44, Tesla
-Steve Jobs, 56, Apple
+csv_data = "Elon Musk, 45, Tesla
+Mark Zuckerberg, 32, Facebook
 Martha Stewart, 74, MSL
 "
 
 people = Person.new_from_csv(csv_data)
-people #=> [#<Person @name="Elon Musk"...>, #<Person @name="Steve Jobs"...>...]
+people #=> [#<Person @name="Elon Musk"...>, #<Person @name="Mark Zuckerberg"...>...]
 
 new_csv_data = "Avi Flombaum, 31, Flatiron School
-Payal Kadakia, 30, ClassPass
-"
+Payal Kadakia, 30, ClassPass"
 
 people << Person.new_from_csv(new_csv_data)
 people #=> [
 #<Person @name="Elon Musk"...>,
-#<Person @name="Steve Jobs"...>
+#<Person @name="Mark Zuckerberg"...>
 #<Person @name="Martha Stewart"...>,
 #<Person @name="Avi Flombaum"...>,
 #<Person @name="Payal Kadakia"...>
 # ]
 ```
 
-We can see that when needing to parse two sets of CSV data, having a class method `Person.new_from_csv` greatly simplifies our code. Let's look at how the class method works a little more closely.
+We can see that, when needing to parse multiple sets of CSV data, having a `Person.new_from_csv` class method greatly simplifies our code. Let's take a closer look at how that class method works.
 
 ```ruby
 class Person
@@ -303,7 +302,7 @@ end
 
 Like in any class method, `self` refers to the class itself so we can call `self.new` to piggyback, wrap, or extend the functionality of `Person.new`. We parse the raw data, create an instance, and assign the data to the corresponding instance properties.
 
-Why do this? If we need to be able to create people from CSVs, why not just build that directly into initialize? Well, the honest answer is because we don't always want to create people from CSV data. Anything we build into initialize will happen always. Another key to writing maintainable code is designing functionality that is closed to modification but open to extension.
+Why do this? If we need to be able to create people from CSVs, why not just build that directly into `#initialize`? Well, the honest answer is because we don't always want to create people from CSV data. Anything we build into initialize will happen always. Another key to writing maintainable code is designing functionality that is closed to modification but open to extension.
 
 Initialize should be closed to modification. It should only handle the most required and common cases of initializing an object. Anything we add to initialize should be permanent and never modified. If we need more functionality when making an instance, instead of modifying initialize, we can extend it by wrapping it within a custom constructor.
 
@@ -471,8 +470,6 @@ class Person
 end
 ```
 
-Here our `Person.destroy_all` method uses the [`Array#clear`](http://docs.ruby-lang.org/en/2.0.0/Array.html#method-i-clear) method to empty the `@@all` array through the class reader `Person.all`.
+Here our `Person.destroy_all` method uses the [`Array#clear`](http://ruby-doc.org/core/Array.html#method-i-clear) method to empty the `@@all` array through the class reader `Person.all`.
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/ruby-advanced-class-methods-readme' title='Ruby Advanced Class Methods'>Ruby Advanced Class Methods</a> on Learn.co and start learning to code for free.</p>
-
-<p class='util--hide'>View <a href='https://learn.co/lessons/ruby-advanced-class-methods-readme'>Advanced Class Methods</a> on Learn.co and start learning to code for free.</p>
