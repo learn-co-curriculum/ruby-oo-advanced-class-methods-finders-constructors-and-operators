@@ -146,7 +146,7 @@ end
 
 Variable names are a very low-level abstraction. They are like making light by fire. Methods that read out of a variable provide an abstraction for the literal variable name. Using a reader method is almost always better and more reliable than using the variable.
 
-We already have a method to read `@@all`, `Person.all`, so why not use that method in `Person.find_by_name`? Within a class method, how do we call another class method? What is the scope of the class method? What is self? The class itself. Consider:
+We already have a method to read `@@people`, `Person.all`, so why not use that method in `Person.find_by_name`? Within a class method, how do we call another class method? What is the scope of the class method? What is self? The class itself. Consider:
 
 ```ruby
 class Person
@@ -172,7 +172,7 @@ end
 
 Within `#initialize`, an instance method, `self` will refer to an instance, an individual person, not the entire class, so we can't simply say `self.all` within an instance method. Instead, we go from the instance, `self`, to the class via `self.class`, returning `Person`, and then evoke the `Person.all` method.
 
-If the variable `@@all` changes names, we only have to update it in one place, the `Person.all` reader. All code that relies on that method still works. 1 conceptual change, 1 line-of-code (LOC) change. That is a commensurate amount of work.
+If the variable `@@people` changes names, we only have to update it in one place, the `Person.all` reader. All code that relies on that method still works. 1 conceptual change, 1 line-of-code (LOC) change. That is a commensurate amount of work.
 
 In addition to the maintainability of our code through class method-level encapsulation (when we build class methods to consolidate the logic of how the class operates so that we only have to update one piece of our code when one thing changes), class methods provide a more readable API for the class in the rest of the code. Consider just one more time the difference in seeing the following two lines of code littered throughout your code:
 
@@ -473,3 +473,5 @@ end
 Here our `Person.destroy_all` method uses the [`Array#clear`](http://ruby-doc.org/core/Array.html#method-i-clear) method to empty the `@@all` array through the class reader `Person.all`.
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/ruby-advanced-class-methods-readme' title='Ruby Advanced Class Methods'>Ruby Advanced Class Methods</a> on Learn.co and start learning to code for free.</p>
+
+<p class='util--hide'>View <a href='https://learn.co/lessons/ruby-advanced-class-methods-readme'>Advanced Class Methods</a> on Learn.co and start learning to code for free.</p>
