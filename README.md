@@ -472,6 +472,8 @@ end
 
 Here our `Person.destroy_all` method uses the [`Array#clear`](http://ruby-doc.org/core/Array.html#method-i-clear) method to empty the `@@all` array through the class reader `Person.all`.
 
-<p data-visibility='hidden'>View <a href='https://learn.co/lessons/ruby-advanced-class-methods-readme' title='Ruby Advanced Class Methods'>Ruby Advanced Class Methods</a> on Learn.co and start learning to code for free.</p>
+## Resources
+
+* [Video Review- Object Models](https://github.com/learn-co-curriculum/oo-ruby-video-review-object-models) 
 
 <p class='util--hide'>View <a href='https://learn.co/lessons/ruby-advanced-class-methods-readme'>Advanced Class Methods</a> on Learn.co and start learning to code for free.</p>
