@@ -2,9 +2,9 @@
 
 ## Objectives
 
-1. Build class finders.
-2. Build class constructors.
-3. Build class operators.
+1. Build class finders
+2. Build class constructors
+3. Build class operators
 
 ## Advanced Class Methods
 
@@ -474,9 +474,9 @@ Here our `Person.destroy_all` method uses the [`Array#clear`](http://ruby-doc.or
 
 ## Resources
 
-* [Video Review- Object Models](https://github.com/learn-co-curriculum/oo-ruby-video-review-object-models) 
+* [Video Review- Object Models](https://www.youtube.com/watch?v=vENMFapLonA) 
 
-* [Video Review- Object Orientation](https://github.com/learn-co-curriculum/oo-ruby-video-object-orientation-overview) 
+* [Video Review- Object Orientation](https://www.youtube.com/watch?v=Z_IoQCVNWtM) 
 
 
 <p class='util--hide'>View <a href='https://learn.co/lessons/ruby-advanced-class-methods-readme'>Advanced Class Methods</a> on Learn.co and start learning to code for free.</p>
