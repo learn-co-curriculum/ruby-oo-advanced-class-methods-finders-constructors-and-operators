@@ -1,5 +1,6 @@
 tags:
-  - tag1
+  - bundler
+  - introduction
 languages:
-  - language1
-resources: 0
+  - ruby
+resources: 2

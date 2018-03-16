@@ -8,46 +8,61 @@
 
 ## Advanced Class Methods
 
-Class methods can act as class readers for class variables as in the case of `Song.all`. Classes are just objects. Objects encapsulate and provide functionality unique to their scope through methods. Instance methods work on an individual level, acting upon specific instances of a class. In the same way, an entire class can be responsible for providing an interface to its data and behavior to the rest of your code through building class methods.
+Consider the following class method: a class method like `Song.all` acts as a reader for the `@@all` class variable. This
+method _exposes_ this piece of data to the rest of our application. Class methods provide an interface for the data and behavior of a class:
 
 ```ruby
 class Person
   attr_accessor :name
   @@all = []
 
+  def initialize(name)
+    @name = name
+  end
+
   def self.all
     @@all
   end
+
 end
 ```
 
-`def self.all` defines a class method that simply exposes the value in the class variable `@@all`. This is a class reader, very similar to an instance reader method that reads out of an instance-level property such as `@name`.
+`self.all` is a class method for reading the data stored in the class variable`@@all`.
+This is a _class_ reader, very similar to an _instance_ reader method that reads an instance property:
 
-What else can class methods help us with? What other common class-level functionality can be exposed through class methods?
+```Ruby
+tim = Person.new("Tim")
+tim.name #=> "Tim"
+```
+
+What else can class methods help us with? What other common class-level functionality can
+be exposed through class methods?
 
 ## Class Finders
 
-Imagine a `Person` class that provides access to all its instances through `Person.all`.
+Imagine a `Person` class that provides access to all of its instances through `Person.all`
 
 ```ruby
 class Person
   attr_accessor :name
   @@all = []
-
-  def self.all
-    @@all
-  end
 
   def initialize(name)
     @name = name
     @@all << self
   end
+
+  def self.all
+    @@all
+  end
+
 end
 
 grace_hopper = Person.new("Grace Hopper")
 sandi_metz = Person.new("Sandi Metz")
 
-Person.all #=> [#<Person @name="Grace Hopper">, #<Person @name="Sandi Metz">]
+Person.all #=> [#<Person @name="Grace Hopper">,
+                #<Person @name="Sandi Metz">]
 ```
 
 How might you find a specific person by name given this `Person` model?
@@ -57,14 +72,15 @@ class Person
   attr_accessor :name
   @@all = []
 
-  def self.all
-    @@all
-  end
-
   def initialize(name)
     @name = name
     @@all << self
   end
+
+  def self.all
+    @@all
+  end
+
 end
 
 Person.new("Grace Hopper")
@@ -80,29 +96,48 @@ avi_flombaum = Person.all.detect{|person| person.name == "Avi Flombaum"}
 avi_flombaum #=> nil
 ```
 
-We're using the [`#detect`](http://ruby-doc.org/core/Enumerable.html#method-i-detect) method to return the first object from `Person.all` that satisfies the condition of its `@name` property equaling the name we are looking for.
+We're using the [`#detect`](http://ruby-doc.org/core/Enumerable.html#method-i-detect) method to return the
+first object from `Person.all` with a name that matches what we are looking for.
 
-Every time your application requires you to find a particular person by name, you will have to use `#detect` or `#each` or some sort of iteration logic on `Person.all` to find a specific instance of a person that has the name you want.
+Every time your application requires you to find a particular person by name, you will
+have to use `#detect` or `#find` or some sort of iteration logic on `Person.all` to find a
+specific instance of a person that has the name you want.
+This stinks! Writing `Person.detect` over and over will quickly become unsustainable as your application grows.
 
-Instead of implementing that logic throughout your code, you should encapsulate it into a class method, such as `Person.find_by_name`. Make the `Person` class responsible for knowing how to find a person by name.
+## There's Gotta Be a Better Way!
+
+<!-- ![Home Video Infomercial GIF](https://media.giphy.com/media/xsATxBQfeKHCg/giphy.gif) -->
+
+___
+
+Instead of writing `#find` or `#detect` every time we want to _search_ for an object, we
+can **encapsulate** this logic into a class method, like `Person.find_by_name`
+Instead of writing
+
+```Ruby
+Person.find{|p| p.name == "Grace Hopper"}
+```
+every single time we need to search, we can simply teach
+our `Person` class _how_ to search by defining a class method:
 
 ```ruby
 class Person
   attr_accessor :name
   @@all = []
 
-  def self.all
-    @@all
-  end
-
   def initialize(name)
     @name = name
     @@all << self
   end
 
-  def self.find_by_name(name)
-    @@all.detect{|person| person.name == name}
+  def self.all
+    @@all
   end
+
+  def self.find_by_name(name)
+    @@all.find{|person| person.name == name}
+  end
+
 end
 
 Person.new("Grace Hopper")
@@ -118,73 +153,107 @@ avi_flombaum = Person.find_by_name("Avi Flombaum")
 avi_flombaum #=> nil
 ```
 
-We call class methods like `Person.find_by_name` 'finders'. Finder class methods are responsible for finding instances based on properties or conditions.
+We call class methods like `Person.find_by_name` 'finders'. Finder class methods are
+responsible for finding instances based on some property or condition.
 
-But we can improve the code above slightly. Code that relies on abstraction is more maintainable and extendable over time. In general, we advance as a species and a civilization when technology provides an abstraction for us to use instead of the literal implementation. When you want light, you don't need to start a fire, you can just flick a light switch. That is an abstraction. The light switch is an abstraction for how people used to create light from fire. We promise. If creating and using abstractions have gotten people this far, we should probably continue embracing that design principle in our code. So where is the literal thing that could be abstracted in the code above?
+#### Slight Digression on Abstraction:
 
-Our current implementation of `Person.find_by_name` reads the instance data for the class directly out of the class variable `@@all`. But imagine if this variable changes? Every method that relies on that literal variable name –– `Person.all`, `Person.find_by_name`, etc. –– would break, and we'd have to update all of them to read from the new variable.
+But we can improve the code above slightly. Code that relies on abstraction is more
+maintainable and extendable over time. In general, we advance as a species and a
+civilization when technology provides an abstraction for us to use instead of the literal
+implementation. When you want light, you don't need to start a fire, you can just flick a
+light switch. _This is an **abstraction**_. We promise. If creating and using abstractions have gotten
+people this far, we should probably continue embracing that design principle in our code.
+___
+
+#### Cool Tangent but What Can We Abstract Away Here?
+
+Our current implementation of `Person.find_by_name` reads the instance data for the class
+**directly** out of the class variable `@@all`. Would this break if we need to rename the `@@all` variable? What if it makes more sense to call it `@@person`?
+Every method that relies on that literal variable name–– `Person.all`,
+`Person.find_by_name`, etc.–– would break, and we'd have to update all of our methods to read
+from the new variable:
 
 ```ruby
 class Person
   attr_accessor :name
   @@people = [] # changed from @@all
 
-  def self.all
-    @@people # changed from @@all
-  end
-
   def initialize(name)
     @name = name
     @@people << self # changed from @@all
   end
 
-  def self.find_by_name(name)
-    @@people.detect{|person| person.name == name} # changed from @@all
+  def self.all
+    @@people # changed from @@all
   end
+
+  def self.find_by_name(name)
+    @@people.find{|person| person.name == name}
+    # changed from @@all
+  end
+
 end
 ```
 
-Variable names are a very low-level abstraction. They are like making light by fire. Methods that read out of a variable provide an abstraction for the literal variable name. Using a reader method is almost always better and more reliable than using the variable.
+Variable names are a very low-level abstraction. They are like making light by fire.
+Methods that read out of a variable provide an abstraction for the literal variable name.
+Using a reader method is almost always better and more reliable than using the variable.
 
-We already have a method to read `@@people`, `Person.all`, so why not use that method in `Person.find_by_name`? Within a class method, how do we call another class method? What is the scope of the class method? What is self? The class itself. Consider:
+We already have a method to read `@@people`, `Person.all`, so why not use that method in
+`Person.find_by_name`?
+Within a class method, how do we call another class method? What is the scope of the class
+method? What is self? **The class itself**. Consider:
 
 ```ruby
 class Person
   attr_accessor :name
   @@people = []
 
+  def initialize(name)
+    @name = name
+    # self in the initialize method is our new instance
+    # self.class is Person
+    # self.class.all == Person.all
+    self.class.all << self
+  end
+
   def self.all
     @@people
   end
 
-  def initialize(name)
-    @name = name
-    self.class.all << self
+  def self.find_by_name(name)
+    self.all.find{|person| person.name == name}
   end
 
-  def self.find_by_name(name)
-    self.all.detect{|person| person.name == name}
-  end
 end
 ```
 
-`self.all` in the context of `Person.find_by_name` is equivalent to `Person.all` as the scope of the method is the class. `self` within a class method is the class itself.
+Within `#initialize`, an instance method, `self` will refer to an instance, not the entire class. We can't simply say `self.all` within an instance method.
+Instead, we go from the instance, `self`, to the class––`self.class`––returning
+`Person`, and then invoke the `Person.all` method.
 
-Within `#initialize`, an instance method, `self` will refer to an instance, an individual person, not the entire class, so we can't simply say `self.all` within an instance method. Instead, we go from the instance, `self`, to the class via `self.class`, returning `Person`, and then evoke the `Person.all` method.
+If the variable `@@people` changes names, we only have to update it in one place, the
+`Person.all` reader.
+All code that relies on that method still works. 1 conceptual change => 1 line-of-code (LOC) change.
 
-If the variable `@@people` changes names, we only have to update it in one place, the `Person.all` reader. All code that relies on that method still works. 1 conceptual change, 1 line-of-code (LOC) change. That is a commensurate amount of work.
-
-In addition to the maintainability of our code through class method-level encapsulation (when we build class methods to consolidate the logic of how the class operates so that we only have to update one piece of our code when one thing changes), class methods provide a more readable API for the class in the rest of the code. Consider just one more time the difference in seeing the following two lines of code littered throughout your code:
+In addition to improving the maintainability of our code through class methods, these
+class methods provide a more readable API for the rest of our application. Consider just
+one more time the difference in seeing the following two lines of code littered throughout
+your code:
 
 ```ruby
-Person.all.detect{|p| p.name == "Ada Lovelace"} # Literal implementation, no abstraction or encapsulation
+Person.all.detect{|p| p.name == "Ada Lovelace"}
+# literal implementation, no abstraction or encapsulation
+# our program would be littered with this
 
-Person.find_by_name("Ada Lovelace") # Abstract implementation with logic entirely encapsulated.
+Person.find_by_name("Ada Lovelace")
+# abstract implementation with logic entirely encapsulated.
 ```
 
 Whenever we use `Person.find_by_name` the intention of our code is revealed. Instead of iterating on an array, our code reads clearly. Instead of describing the implementation of finding a person by name, our code simply says what it is doing, not how. This is called an API. You want to build objects that provide a semantic and obvious API. Methods that reveal what the object will do, not how it does that. Always hide the how and show the what.
 
-Finders are just one example of a more semantic API for our classes. Let's look at another way class methods can provide a higher level of semantics for our code.
+Finders are just one example of a more semantic API for our classes. Let's loÂok at another way class methods can provide a higher level of semantics for our code.
 
 ## Custom Class Constructors
 
@@ -472,13 +541,13 @@ end
 
 Here our `Person.destroy_all` method uses the [`Array#clear`](http://ruby-doc.org/core/Array.html#method-i-clear) method to empty the `@@all` array through the class reader `Person.all`.
 
-## Resources 
+## Resources
 
 * [Video Review- Object Orientation: Key Mechanics](https://www.youtube.com/watch?v=-jrEbj4iCQ8)
 
-* [Video Review- Object Models](https://www.youtube.com/watch?v=vENMFapLonA) 
+* [Video Review- Object Models](https://www.youtube.com/watch?v=vENMFapLonA)
 
-* [Video Review- Object Orientation](https://www.youtube.com/watch?v=Z_IoQCVNWtM) 
+* [Video Review- Object Orientation](https://www.youtube.com/watch?v=Z_IoQCVNWtM)
 
 
 <p class='util--hide'>View <a href='https://learn.co/lessons/ruby-advanced-class-methods-readme'>Advanced Class Methods</a> on Learn.co and start learning to code for free.</p>
