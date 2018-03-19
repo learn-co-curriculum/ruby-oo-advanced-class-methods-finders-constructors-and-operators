@@ -229,18 +229,17 @@ class Person
 end
 ```
 
-Within `#initialize`, an instance method, `self` will refer to an instance, not the entire class. We can't simply say `self.all` within an instance method.
-Instead, we go from the instance, `self`, to the class––`self.class`––returning
-`Person`, and then invoke the `Person.all` method.
+(Within `#initialize`, an instance method, `self` will refer to an instance, not the entire class.
+In order to access `Person.all`, we need go from the instance, `self`, to the class––`self.class`––returning
+`Person`, and then invoke the `Person.all` method).
 
 If the variable `@@people` changes names, we only have to update it in one place, the
 `Person.all` reader.
-All code that relies on that method still works. 1 conceptual change => 1 line-of-code (LOC) change.
+All code that relies on that method still works. 1 conceptual change -> 1 line-of-code (LOC) change. Nice.
 
 In addition to improving the maintainability of our code through class methods, these
 class methods provide a more readable API for the rest of our application. Consider just
-one more time the difference in seeing the following two lines of code littered throughout
-your code:
+one more time the difference in seeing the following two lines littered throughout your code:
 
 ```ruby
 Person.all.detect{|p| p.name == "Ada Lovelace"}
@@ -251,21 +250,28 @@ Person.find_by_name("Ada Lovelace")
 # abstract implementation with logic entirely encapsulated.
 ```
 
-Whenever we use `Person.find_by_name` the intention of our code is revealed. Instead of iterating on an array, our code reads clearly. Instead of describing the implementation of finding a person by name, our code simply says what it is doing, not how. This is called an API. You want to build objects that provide a semantic and obvious API. Methods that reveal what the object will do, not how it does that. Always hide the how and show the what.
+Whenever we use `Person.find_by_name` the intention of our code is clear. Instead of
+iterating over an array, our code reads clearly. Instead of describing the implementation
+of finding a person by name, our code simply says what it is doing, not how. You want to
+build objects that provide a semantic and obvious API, or interface. Methods that reveal
+what the object will do, not how it does that. Always hide the how and show the what.
 
-Finders are just one example of a more semantic API for our classes. Let's loÂok at another way class methods can provide a higher level of semantics for our code.
+Finders are just one example of a more semantic API for our classes. Let's look at another
+way class methods can improve the readability of our code.
 
 ## Custom Class Constructors
 
-Our marketing team has provided us with a list of people in comma-separated values format (CSV), a common formatting convention when exporting from spreadsheets. The raw data looks like:
+Our marketing team has provided us with a list of people in comma-separated values (CSV),
+a common formatting convention when exporting from spreadsheets. The raw data looks like:
 
-```
+```text
 Elon Musk, 45, Tesla/SpaceX
 Mark Zuckerberg, 32, Facebook
 Martha Stewart, 74, MSL
 ```
 
-They tell us that they will often need to upload CSVs of people data.  Let's look at how we'd create a person instance from a CSV.
+They tell us that they will often need to upload CSVs of people data.  Let's look at how we'd create a person
+instance from a CSV:
 
 ```ruby
 class Person
@@ -274,8 +280,7 @@ end
 
 csv_data = "Elon Musk, 45, Tesla
 Mark Zuckerberg, 32, Facebook
-Martha Stewart, 74, MSL
-"
+Martha Stewart, 74, MSL"
 
 rows = csv_data.split("\n")
 people = rows.collect do |row|
@@ -289,10 +294,18 @@ people = rows.collect do |row|
   person.company = company
   person
 end
-people #=> [#<Person @name="Elon Musk"...>, #<Person @name="Mark Zuckerberg"...>...]
+people
+#=> [
+  #<Person @name="Elon Musk"...>,
+  #<Person @name="Mark Zuckerberg"...>,
+  # ...
+# ]
 ```
 
-Pretty complex. We don't want to do that through our application. In an ideal world every time we got CSV data we'd just want the `Person` class to be responsible for parsing it. Could we build something like `Person.new_from_csv`? Of course! Let's look at how we might implement a custom constructor.
+Pretty complex. We don't want to do that throughout our application.
+In an ideal world, every time we got CSV data we'd just want the `Person` class to be responsible for parsing it.
+Could we build something like `Person.new_from_csv`?
+Of course! Let's look at how we might implement a custom constructor.
 
 ```ruby
 class Person
@@ -318,11 +331,14 @@ end
 
 csv_data = "Elon Musk, 45, Tesla
 Mark Zuckerberg, 32, Facebook
-Martha Stewart, 74, MSL
-"
+Martha Stewart, 74, MSL"
 
 people = Person.new_from_csv(csv_data)
-people #=> [#<Person @name="Elon Musk"...>, #<Person @name="Mark Zuckerberg"...>...]
+people #=> [
+  #<Person @name="Elon Musk"...>,
+  #<Person @name="Mark Zuckerberg"...>,
+  # ...
+# ]
 
 new_csv_data = "Avi Flombaum, 31, Flatiron School
 Payal Kadakia, 30, ClassPass"
@@ -337,7 +353,9 @@ people #=> [
 # ]
 ```
 
-We can see that, when needing to parse multiple sets of CSV data, having a `Person.new_from_csv` class method greatly simplifies our code. Let's take a closer look at how that class method works.
+We can see that, when needing to parse multiple sets of CSV data, having a
+`Person.new_from_csv` class method greatly simplifies our code. Let's take a closer look
+at how that class method works:
 
 ```ruby
 class Person
@@ -346,9 +364,9 @@ class Person
   def self.new_from_csv(csv_data)
     # Split the CSV data into an array of individual rows.
     rows = csv_data.split("\n")
-    # For each row, let's collect a Person instance based on the data.
+    # For each row, let's collect a Person instance based on the data
     people = rows.collect do |row|
-      # Split the row into 3 parts, name, age, company, at the ", " in the data.
+      # Split the row into 3 parts, name, age, company, at the ", "
       data = row.split(", ")
       name = data[0]
       age = data[1]
@@ -369,15 +387,30 @@ class Person
 end
 ```
 
-Like in any class method, `self` refers to the class itself so we can call `self.new` to piggyback, wrap, or extend the functionality of `Person.new`. We parse the raw data, create an instance, and assign the data to the corresponding instance properties.
+Like in any class method, `self` refers to the class itself so we can call `self.new` to
+piggyback, wrap, or extend the functionality of `Person.new`––when I call
+`Person.new_from_csv`, who is receiving the method call? It's the `Person` class itself.
+Therefore, `self` in this context is `Person`. We parse the raw data, create an instance,
+and assign the data to the corresponding instance properties.
 
-Why do this? If we need to be able to create people from CSVs, why not just build that directly into `#initialize`? Well, the honest answer is because we don't always want to create people from CSV data. Anything we build into initialize will happen always. Another key to writing maintainable code is designing functionality that is closed to modification but open to extension.
+Why do this? If we need to be able to create people from CSVs, why not just build that
+directly into `#initialize`? Well, the honest answer is because we don't always want to
+create people from CSV data. Anything we build into initialize will happen **always**.
+Another key to writing maintainable code is designing functionality that is closed to
+modification but open to extension.
 
-Initialize should be closed to modification. It should only handle the most required and common cases of initializing an object. Anything we add to initialize should be permanent and never modified. If we need more functionality when making an instance, instead of modifying initialize, we can extend it by wrapping it within a custom constructor.
+Initialize should be closed to modification. It should only handle the most often required
+and common cases of initializing an object. Anything we add to initialize should be
+permanent and never modified. If we need more functionality when making an instance,
+instead of modifying initialize, we can extend it by wrapping it within a custom
+constructor.
 
-If we ever need to make people from xml or json we can continue to extend the object with custom constructors instead of constantly modifying initialize with complex logic.
+If we ever need to make people from xml or json we can continue to extend the object with
+custom constructors instead of constantly modifying initialize with complex logic.
 
-Let's look at a somewhat simpler example of a custom constructor that wraps `.new`. When building objects that can be saved into a class variable `@@all`, we might not always want to save the newly instantiated instance.
+Let's look at a somewhat simpler example of a custom constructor that wraps `.new`. When
+building objects that can be saved into a class variable `@@all`, we might not always want
+to save the newly instantiated instance.
 
 ```ruby
 class Person
@@ -389,7 +422,9 @@ class Person
 end
 ```
 
-With that code, no matter what, person instances will always be saved. We could instead implement a simple `.create` class method to provide the functionality of instantiating and creating the instance, leaving `.new` to function as normal.
+With that code, no matter what, person instances will always be saved. We could instead
+implement a simple `.create` class method to provide the functionality of instantiating
+and creating the instance, leaving `.new` to function as normal.
 
 ```ruby
 class Person
@@ -403,7 +438,8 @@ end
 
 ## Class Operators
 
-Beyond finders and custom constructors that return existing instances or create new instances, class methods can also manipulate class-level data.
+Beyond finders and custom constructors that return existing instances or create new
+instances, class methods can also manipulate class-level data.
 
 A basic case of this might be printing all the people in our application.
 
@@ -462,7 +498,9 @@ Way nicer.
 
 ## Class Operators
 
-Additionally, class methods might provide a global operation on data. Imagine that one of the csvs we were provided with has people's names in lowercase letters. We want proper capitalization. We can build a class method `Person.normalize_names`
+Additionally, class methods might provide a global operation on data. Imagine that one of
+the csvs we were provided with has people's names in lowercase letters. We want proper
+capitalization. We can build a class method `Person.normalize_names`
 
 ```ruby
 class Person
