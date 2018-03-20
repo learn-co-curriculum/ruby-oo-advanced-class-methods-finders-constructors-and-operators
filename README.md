@@ -256,7 +256,7 @@ of finding a person by name, our code simply says what it is doing, not how. You
 build objects that provide a semantic and obvious API, or interface. Methods that reveal
 what the object will do, not how it does that. Always hide the how and show the what.
 
-Finders are just one example of a more semantic API for our classes. Let's look at another
+<!-- Finders are just one example of a more semantic API for our classes. Let's look at another
 way class methods can improve the readability of our code.
 
 ## Custom Class Constructors
@@ -575,7 +575,7 @@ class Person
     self.all.clear
   end
 end
-```
+``` -->
 
 Here our `Person.destroy_all` method uses the [`Array#clear`](http://ruby-doc.org/core/Array.html#method-i-clear) method to empty the `@@all` array through the class reader `Person.all`.
 
