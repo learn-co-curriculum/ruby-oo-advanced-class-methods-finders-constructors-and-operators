@@ -30,7 +30,7 @@ end
 `self.all` is a class method for reading the data stored in the class variable`@@all`.
 This is a _class_ reader, very similar to an _instance_ reader method that reads an instance property:
 
-```Ruby
+```ruby
 tim = Person.new("Tim")
 tim.name #=> "Tim"
 ```
@@ -111,7 +111,7 @@ Instead of writing `#find` every time we want to _search_ for an object, we
 can **encapsulate** this logic into a class method, like `Person.find_by_name`
 Instead of writing
 
-```Ruby
+```ruby
 Person.find{|p| p.name == "Grace Hopper"}
 ```
 every single time we need to search, we can simply teach
