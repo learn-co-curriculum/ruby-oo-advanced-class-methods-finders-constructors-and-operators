@@ -8,8 +8,8 @@
 
 ## Advanced Class Methods
 
-Consider the following class method: a class method like `Song.all` acts as a reader for the `@@all` class variable. This
-method _exposes_ this piece of data to the rest of our application. Class methods provide an interface for the data and behavior of a class:
+Consider the method `.all` on the `Song` class––`Song.all`. This method acts as a reader for the `@@all` class variable. This
+method _exposes_ this piece of data to the rest of our application. Class methods provide an interface for the data held within a class. This data, stored in a class variable, would otherwise be inaccessible outside of the class:
 
 ```ruby
 class Person
@@ -97,13 +97,13 @@ avi_flombaum #=> nil
 ```
 
 Every time your application requires you to find a particular person by name, you will
-have to use `#find` or some sort of iteration logic on `Person.all` to find a
-specific instance of a person that has the name you want.
+have to use `#find` or some sort of iteration logic on `Person.all` to find a specific instance of a person that has the name you want.
+`#find` will return a specific instance of a person, not an array. [see the docs here](https://ruby-doc.org/core-2.2.3/Enumerable.html#method-i-find)
 This stinks! Writing `Person.find` over and over will quickly become unsustainable as your application grows.
 
 ## There's Gotta Be a Better Way!
 
-<!-- ![Home Video Infomercial GIF](https://media.giphy.com/media/xsATxBQfeKHCg/giphy.gif) -->
+![Home Video Infomercial GIF](https://media.giphy.com/media/xsATxBQfeKHCg/giphy.gif)
 
 ___
 
@@ -234,9 +234,10 @@ If the variable `@@people` changes names, we only have to update it in one place
 `Person.all` reader.
 All code that relies on that method still works. 1 conceptual change -> 1 line-of-code (LOC) change. Nice.
 
-In addition to improving the maintainability of our code through class methods, these
-class methods provide a more readable API for the rest of our application. Consider just
-one more time the difference in seeing the following two lines littered throughout your code:
+
+In addition to improving the maintainability of our code, class methods also provide a
+more readable API for the rest of our application. Consider just one more time the
+difference in seeing the following two lines littered throughout your code:
 
 ```ruby
 Person.all.find{|p| p.name == "Ada Lovelace"}
