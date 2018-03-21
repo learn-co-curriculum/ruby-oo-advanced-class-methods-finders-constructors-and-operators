@@ -86,23 +86,20 @@ end
 Person.new("Grace Hopper")
 Person.new("Sandi Metz")
 
-sandi_metz = Person.all.detect{|person| person.name == "Sandi Metz"}
+sandi_metz = Person.all.find{|person| person.name == "Sandi Metz"}
 sandi_metz #=> #<Person @name="Sandi Metz">
 
-grace_hopper = Person.all.detect{|person| person.name == "Grace Hopper"}
+grace_hopper = Person.all.find{|person| person.name == "Grace Hopper"}
 grace_hopper #=> #<Person @name="Grace Hopper">
 
-avi_flombaum = Person.all.detect{|person| person.name == "Avi Flombaum"}
+avi_flombaum = Person.all.find{|person| person.name == "Avi Flombaum"}
 avi_flombaum #=> nil
 ```
 
-We're using the [`#detect`](http://ruby-doc.org/core/Enumerable.html#method-i-detect) method to return the
-first object from `Person.all` with a name that matches what we are looking for.
-
 Every time your application requires you to find a particular person by name, you will
-have to use `#detect` or `#find` or some sort of iteration logic on `Person.all` to find a
+have to use `#find` or some sort of iteration logic on `Person.all` to find a
 specific instance of a person that has the name you want.
-This stinks! Writing `Person.detect` over and over will quickly become unsustainable as your application grows.
+This stinks! Writing `Person.find` over and over will quickly become unsustainable as your application grows.
 
 ## There's Gotta Be a Better Way!
 
@@ -110,7 +107,7 @@ This stinks! Writing `Person.detect` over and over will quickly become unsustain
 
 ___
 
-Instead of writing `#find` or `#detect` every time we want to _search_ for an object, we
+Instead of writing `#find` every time we want to _search_ for an object, we
 can **encapsulate** this logic into a class method, like `Person.find_by_name`
 Instead of writing
 
@@ -242,7 +239,7 @@ class methods provide a more readable API for the rest of our application. Consi
 one more time the difference in seeing the following two lines littered throughout your code:
 
 ```ruby
-Person.all.detect{|p| p.name == "Ada Lovelace"}
+Person.all.find{|p| p.name == "Ada Lovelace"}
 # literal implementation, no abstraction or encapsulation
 # our program would be littered with this
 
