@@ -342,6 +342,7 @@ new_csv_data = "Avi Flombaum, 31, Flatiron School
 Payal Kadakia, 30, ClassPass"
 
 people << Person.new_from_csv(new_csv_data)
+people.flatten
 people #=> [
 #<Person @name="Elon Musk"...>,
 #<Person @name="Mark Zuckerberg"...>
