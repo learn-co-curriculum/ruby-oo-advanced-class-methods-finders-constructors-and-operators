@@ -12,7 +12,7 @@ Consider the method `.all` on the `Song` class––`Song.all`. This method acts
 method _exposes_ this piece of data to the rest of our application. Class methods provide an interface for the data held within a class. This data, stored in a class variable, would otherwise be inaccessible outside of the class:
 
 ```ruby
-class Person
+class Song
   attr_accessor :name
   @@all = []
 
