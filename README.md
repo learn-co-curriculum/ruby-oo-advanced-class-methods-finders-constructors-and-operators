@@ -227,7 +227,7 @@ end
 ```
 
 (Within `#initialize`, an instance method, `self` will refer to an instance, not the entire class.
-In order to access `Person.all`, we need go from the instance, `self`, to the class––`self.class`––returning
+In order to access `Person.all`, we need to go from the instance, `self`, to the class––`self.class`––returning
 `Person`, and then invoke the `Person.all` method).
 
 If the variable `@@people` changes names, we only have to update it in one place, the
