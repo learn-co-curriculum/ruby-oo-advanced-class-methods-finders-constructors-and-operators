@@ -166,7 +166,7 @@ ___
 #### Cool Tangent but What Can We Abstract Away Here?
 
 Our current implementation of `Person.find_by_name` reads the instance data for the class
-**directly** out of the class variable `@@all`. Would this break if we need to rename the `@@all` variable? What if it makes more sense to call it `@@person`?
+**directly** out of the class variable `@@all`. Would this break if we need to rename the `@@all` variable? What if it makes more sense to call it `@@people`?
 Every method that relies on that literal variable name–– `Person.all`,
 `Person.find_by_name`, etc.–– would break, and we'd have to update all of our methods to read
 from the new variable:
